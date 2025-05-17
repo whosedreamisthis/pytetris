@@ -6,6 +6,7 @@ class Tetromino:
         self.type = t_type
         self.x = 5
         self.y = 1
+        self.landed = False
         self.set_shape()
         
     def set_shape(self):
@@ -33,10 +34,15 @@ class Tetromino:
 
     
     def update(self):
-        self.y += 1        
-        if self.y * TILE_SIZE > WINDOW_HEIGHT - 2:
-            self.y = WINDOW_HEIGHT/ TILE_SIZE - 2
-        print(self.y)
+        
+        next_y = self.y + 1
+        for offset in self.shape:
+            if (next_y + offset[1]) * TILE_SIZE >= WINDOW_HEIGHT:
+                self.landed = True
+                break
+        if not self.landed:
+            self.y += 1
+            
     def draw(self,screen):
         for i in range(len(self.shape)):
             pygame.draw.rect(screen, self.color, ((self.x + self.shape[i][0]) * TILE_SIZE,(self.y + self.shape[i][1]) * TILE_SIZE, TILE_SIZE - 1, TILE_SIZE - 1))
