@@ -56,7 +56,9 @@ class Tetromino:
             self.shape = [(0,0),(1,0), (0,1),(1,1)]
             self.color = blue
 
-    def update(self):
+    def update(self, fall):
+        if not fall:
+            return
         self.y += 1
         
         

@@ -5,12 +5,15 @@ from tile import Tile
 from board import Board
 from consts import *
 from tetromino import Tetromino
-
+slow_sleep = 1
+fast_sleep = 0.1
+fast = False
 white = (255, 255, 255)
 black = (0, 0, 0)
 screen = pygame.display.set_mode((WINDOW_WIDTH,WINDOW_HEIGHT))
 pygame.display.set_caption("Tetris")
 clock = pygame.time.Clock() 
+
 
 class Game:
     tetrominos = []
@@ -21,6 +24,10 @@ class Game:
         self.tetrominos  = []
         self.init_tetrominos()
         self.current_tetromino = self.get_random_tetromino()
+        self.fast = False
+        self.fall_speed = 1  # Tetromino falls 1 block per second (we'll control this with time)
+        self.last_fall_time = time.time()
+        self.fall = False
         
     def get_random_tetromino(self):
         return random.choice(self.tetrominos)
@@ -39,19 +46,39 @@ class Game:
                     elif event.key == pygame.K_RIGHT:
                         self.current_tetromino.move_right()
                         print("Right arrow key pressed")
+                    elif event.key == pygame.K_DOWN:
+                        self.fast = True
+                        self.fall_speed = 0.1
+                elif event.type == pygame.KEYUP:
+                    if event.key == pygame.K_DOWN:
+                        self.fast = False
+                        self.fall_speed = 1
+            
+            current_time = time.time()
+            if current_time - self.last_fall_time >= self.fall_speed:
+                self.fall = True  # Move down by one block
+                self.last_fall_time = current_time
+            else:
+                self.fall = False
+
+   
+            
                 # Your code to move right, etc.
             screen.fill(white)
             self.board.draw(screen)
-            self.current_tetromino.update()            
+            self.current_tetromino.update(self.fall)            
             self.current_tetromino.draw(screen)
             if self.current_tetromino.landed:
+                
                 self.current_tetromino = self.get_random_tetromino()
                 self.current_tetromino.start()
             
 
             pygame.display.update()
-            # clock.tick(60)
-            time.sleep(0.1)
+            # clock.tick(1) 
+            pygame.time.Clock().tick(60)
+            
+            # time.sleep(fast_sleep if self.fast else slow_sleep)
             
     def init_tetrominos(self):
         self.tetrominos.append(Tetromino("I"))
