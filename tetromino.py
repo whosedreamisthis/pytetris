@@ -32,16 +32,18 @@ class Tetromino:
             self.shape = [(0,0),(1,0), (0,1),(1,1)]
             self.color = blue
 
-    
-    def update(self):
+    def update(self,board):
+        self.y += 1
         
-        next_y = self.y + 1
+        
         for offset in self.shape:
-            if (next_y + offset[1]) * TILE_SIZE >= WINDOW_HEIGHT:
+            next_y = self.y + 1 + offset[1]
+            next_x = self.x + offset[0]
+            if next_y * TILE_SIZE >= WINDOW_HEIGHT:
                 self.landed = True
                 break
-        if not self.landed:
-            self.y += 1
+            elif 
+            
             
     def draw(self,screen):
         for i in range(len(self.shape)):

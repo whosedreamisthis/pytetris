@@ -33,8 +33,11 @@ class Game:
                     self.quit = True
             screen.fill(white)
             self.board.draw(screen)
-            self.current_tetromino.update()
+            self.current_tetromino.update()            
             self.current_tetromino.draw(screen)
+            if self.current_tetromino.landed:
+                self.current_tetromino = self.get_random_tetromino()
+            
 
             pygame.display.update()
             clock.tick(60)
