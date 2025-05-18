@@ -4,7 +4,7 @@ from board import Board
 
 class Tetromino:
     def __init__(self, t_type):
-        self.type = t_type
+        self.type = "Z"#t_type
         self.original_position = (5,1)
         self.x = self.original_position[0]
         self.y = self.original_position[1]
@@ -74,19 +74,19 @@ class Tetromino:
                 self.x -= 1
     def set_shape(self):
         if self.type == "I":
-            self.shape = [(0,0),(0, 1), (0,2),(0,3)]
+            self.shape = [(0,0),(0, 1), (0,-1),(0,-2)]
             self.color = red
         elif self.type == "J":
-            self.shape = [(0,0),(0, 1), (0,2),(-1,2)]
+            self.shape = [(0,0),(-1,1), (0,1),(0,-1)]
             self.color = brown
         elif self.type == "L":
-            self.shape = [(0,0),(0, 1), (0,2),(1,2)]
+            self.shape = [(0,0),(1,1), (0,1),(0,-1)]
             self.color = yellow
         elif self.type == "S":
-            self.shape = [(0,0),(-1,0 ), (-1,1),(-2,1)]
+            self.shape = [(0,0),(1,0 ), (0,1),(-1,1)]
             self.color = green
         elif self.type == "Z":
-            self.shape = [(0,0),(1,0), (1,1),(2,1)]
+            self.shape = [(0,0),(-1,0), (0,1),(1,1)]
             self.color = purple
         elif self.type == "T":
             self.shape = [(0,0),(-1,0), (1,0),(0,1)]
