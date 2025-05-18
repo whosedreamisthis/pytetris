@@ -5,6 +5,7 @@ class Tile:
         self.color = color
         self.x = x
         self.y = y
+        self.filled = False
     
     def draw(self,screen):
          pygame.draw.rect(screen, self.color, (self.x * TILE_SIZE,self.y * TILE_SIZE, TILE_SIZE - 1, TILE_SIZE - 1))

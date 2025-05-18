@@ -1,9 +1,10 @@
 import pygame
 from consts import *
+from board import Board
 
 class Tetromino:
     def __init__(self, t_type):
-        self.type = "T" #t_type
+        self.type = t_type
         self.original_position = (5,1)
         self.x = self.original_position[0]
         self.y = self.original_position[1]
@@ -56,11 +57,12 @@ class Tetromino:
             self.shape = [(0,0),(1,0), (0,1),(1,1)]
             self.color = blue
 
-    def update(self, fall):
+    def update(self, board, fall):
         if not fall:
             return
         self.y += 1
         
+        tiles = board.get_tiles()
         
         for offset in self.shape:
             next_y = self.y + 1 + offset[1]
@@ -68,6 +70,8 @@ class Tetromino:
             if next_y * TILE_SIZE >= WINDOW_HEIGHT:
                 self.landed = True
                 break
+            if tiles[next_x][next_y].filled:
+                self.landed = True
             
             
     def draw(self,screen):

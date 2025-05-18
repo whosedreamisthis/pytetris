@@ -8,8 +8,6 @@ from tetromino import Tetromino
 slow_sleep = 1
 fast_sleep = 0.1
 fast = False
-white = (255, 255, 255)
-black = (0, 0, 0)
 screen = pygame.display.set_mode((WINDOW_WIDTH,WINDOW_HEIGHT))
 pygame.display.set_caption("Tetris")
 clock = pygame.time.Clock() 
@@ -64,12 +62,13 @@ class Game:
    
             
                 # Your code to move right, etc.
-            screen.fill(white)
+            screen.fill((80,80,80))
             self.board.draw(screen)
-            self.current_tetromino.update(self.fall)            
+            self.current_tetromino.update(self.board, self.fall)            
             self.current_tetromino.draw(screen)
             if self.current_tetromino.landed:
-                
+                self.board.onTetrominoLanded(self.current_tetromino)
+                self.last_fall_time = time.time()
                 self.current_tetromino = self.get_random_tetromino()
                 self.current_tetromino.start()
             
