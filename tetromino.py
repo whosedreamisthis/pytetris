@@ -3,7 +3,7 @@ from consts import *
 
 class Tetromino:
     def __init__(self, t_type):
-        self.type = t_type
+        self.type = "T" #t_type
         self.original_position = (5,1)
         self.x = self.original_position[0]
         self.y = self.original_position[1]
@@ -14,7 +14,25 @@ class Tetromino:
         self.x = self.original_position[0]
         self.y = self.original_position[1]
         self.landed = False
+        
+    def move_left(self):
+        self.x -= 1
+        for offset in self.shape:
+            next_y = self.y + offset[1]
+            next_x = self.x + offset[0]
+            
+            if next_x < 0:
+                self.x += 1
 
+                 
+        
+    def move_right(self):
+        self.x += 1
+        for offset in self.shape:
+            next_y = self.y + offset[1]
+            next_x = self.x + offset[0]
+            if next_x * TILE_SIZE >= WINDOW_WIDTH:
+                self.x -= 1
     def set_shape(self):
         if self.type == "I":
             self.shape = [(0,0),(0, 1), (0,2),(0,3)]

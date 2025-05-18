@@ -31,6 +31,15 @@ class Game:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.quit = True
+                if event.type == pygame.KEYDOWN:  # Check for a key press
+                    if event.key == pygame.K_LEFT:
+                        self.current_tetromino.move_left()
+                        print("Left arrow key pressed")
+                    # Your code to move left, etc.
+                    elif event.key == pygame.K_RIGHT:
+                        self.current_tetromino.move_right()
+                        print("Right arrow key pressed")
+                # Your code to move right, etc.
             screen.fill(white)
             self.board.draw(screen)
             self.current_tetromino.update()            
