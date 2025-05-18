@@ -6,7 +6,7 @@ from board import Board
 from consts import *
 from tetromino import Tetromino
 slow_sleep = 1
-fast_sleep = 0.1
+fast_sleep = 0.01
 fast = False
 screen = pygame.display.set_mode((WINDOW_WIDTH,WINDOW_HEIGHT))
 pygame.display.set_caption("Tetris")
@@ -26,6 +26,7 @@ class Game:
         self.fall_speed = 1  # Tetromino falls 1 block per second (we'll control this with time)
         self.last_fall_time = time.time()
         self.fall = False
+        self.paused = False
         
     def get_random_tetromino(self):
         return random.choice(self.tetrominos)
@@ -46,16 +47,16 @@ class Game:
                         print("Right arrow key pressed")
                     elif event.key == pygame.K_DOWN:
                         self.fast = True
-                        self.fall_speed = 0.1
+                        self.fall_speed = fast_sleep
                     elif event.key == pygame.K_a:
-                        self.current_tetromino.rotate_counter_clockwise()
-                    elif event.key == pygame.K_d:
-                        self.current_tetromino.rotate_clockwise()
+                        self.current_tetromino.rotate_counter_clockwise(self.board)
+                    elif event.key == pygame.K_d or event.key == pygame.K_UP:
+                        self.current_tetromino.rotate_clockwise(self.board)
 
                 elif event.type == pygame.KEYUP:
                     if event.key == pygame.K_DOWN:
                         self.fast = False
-                        self.fall_speed = 1
+                        self.fall_speed = slow_sleep
             
             current_time = time.time()
             if current_time - self.last_fall_time >= self.fall_speed:
@@ -67,16 +68,19 @@ class Game:
    
             
                 # Your code to move right, etc.
-            screen.fill((80,80,80))
-            self.board.draw(screen)
-            self.current_tetromino.update(self.board, self.fall)            
-            self.current_tetromino.draw(screen)
-            if self.current_tetromino.landed:
-                self.board.onTetrominoLanded(self.current_tetromino)
-                self.last_fall_time = time.time()
-                self.current_tetromino = self.get_random_tetromino()
-                self.current_tetromino.start()
-            
+            if not self.paused:
+                screen.fill((80,80,80))
+                self.board.draw(screen)
+                self.current_tetromino.update(self.board, self.fall)            
+                self.current_tetromino.draw(screen)
+                if self.current_tetromino.landed:
+                    self.board.onTetrominoLanded(self.current_tetromino)
+                    self.last_fall_time = time.time()
+                    self.current_tetromino = self.get_random_tetromino()
+                    self.current_tetromino.start()
+                    if self.current_tetromino.collided(self.board):
+                        self.paused = True
+                
 
             pygame.display.update()
             # clock.tick(1) 

@@ -25,19 +25,45 @@ class Tetromino:
             if next_x < 0:
                 self.x += 1
 
-    def rotate_clockwise(self):
+    def rotate_clockwise(self,board):
         rotated_shape = []
         for x, y in self.shape:
             rotated_shape.append((-y, x))
-        self.shape = rotated_shape
+            
+        filled = self.collided(board)
+        
+        if not filled:
+            self.shape = rotated_shape
+        
 
-    def rotate_counter_clockwise(self):
+    def rotate_counter_clockwise(self,board):
         rotated_shape = []
         for x, y in self.shape:
             rotated_shape.append((y, -x))
         # print("shape before",self.shape)
         # print("shape after",rotated_shape)
-        self.shape = rotated_shape
+        filled = self.collided(board)
+        
+        if not filled:
+            self.shape = rotated_shape
+        
+    
+            
+    def collided(self, board):
+        filled = False
+        for offset in self.shape:
+            next_x = self.x + offset[0]
+            next_y = self.y + offset[1]
+
+            # Boundary checks:
+            if next_x < 0 or next_x >= len(board.tiles) or next_y < 0 or next_y >= len(board.tiles[0]):
+                return True  # Collision with boundary
+
+            if board.tiles[next_x][next_y].filled:
+                filled = True
+                break
+        return filled
+
         
     def move_right(self):
         self.x += 1
