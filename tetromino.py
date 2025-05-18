@@ -4,7 +4,7 @@ from board import Board
 
 class Tetromino:
     def __init__(self, t_type):
-        self.type = "J"#t_type
+        self.type = t_type
         self.original_position = (5,1)
         self.x = self.original_position[0]
         self.y = self.original_position[1]
