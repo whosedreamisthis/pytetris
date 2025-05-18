@@ -51,7 +51,7 @@ class Game:
                     elif event.key == pygame.K_a:
                         self.current_tetromino.rotate_counter_clockwise(self.board)
                     elif event.key == pygame.K_d or event.key == pygame.K_UP:
-                        self.current_tetromino.rotate_clockwise(self.board)
+                        self.current_tetromino.rotate_clockwise(self.current_tetromino.shape,self.board)
 
                 elif event.type == pygame.KEYUP:
                     if event.key == pygame.K_DOWN:
@@ -73,13 +73,23 @@ class Game:
                 self.board.draw(screen)
                 self.current_tetromino.update(self.board, self.fall)            
                 self.current_tetromino.draw(screen)
+                # if self.current_tetromino.landed:
+                #     self.board.onTetrominoLanded(self.current_tetromino)
+                #     self.last_fall_time = time.time()
+                #     self.current_tetromino = self.get_random_tetromino()
+                #     self.current_tetromino.start()
+                #     if self.current_tetromino.collided(self.board):
+                #         self.paused = True
+                
+                
                 if self.current_tetromino.landed:
                     self.board.onTetrominoLanded(self.current_tetromino)
-                    self.last_fall_time = time.time()
-                    self.current_tetromino = self.get_random_tetromino()
-                    self.current_tetromino.start()
-                    if self.current_tetromino.collided(self.board):
+                    if self.check_game_over():  # New function to check game over
                         self.paused = True
+                    else:
+                        self.last_fall_time = time.time()
+                        self.current_tetromino = self.get_random_tetromino()
+                        self.current_tetromino.start()
                 
 
             pygame.display.update()
@@ -88,6 +98,13 @@ class Game:
             
             # time.sleep(fast_sleep if self.fast else slow_sleep)
             
+    def check_game_over(self):
+        # Create a new tetromino to check for collision
+        temp_tetromino = self.get_random_tetromino()
+        temp_tetromino.start()  # Reset its position
+
+        return temp_tetromino.collided(temp_tetromino.shape,self.board)
+    
     def init_tetrominos(self):
         self.tetrominos.append(Tetromino("I"))
         self.tetrominos.append(Tetromino("O"))

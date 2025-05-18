@@ -4,7 +4,7 @@ from board import Board
 
 class Tetromino:
     def __init__(self, t_type):
-        self.type = t_type
+        self.type = "J"#t_type
         self.original_position = (5,1)
         self.x = self.original_position[0]
         self.y = self.original_position[1]
@@ -25,33 +25,33 @@ class Tetromino:
             if next_x < 0:
                 self.x += 1
 
-    def rotate_clockwise(self,board):
+    def rotate_clockwise(self,shape,board):
         rotated_shape = []
-        for x, y in self.shape:
+        for x, y in shape:
             rotated_shape.append((-y, x))
             
-        filled = self.collided(board)
+        filled = self.collided(rotated_shape,board)
         
         if not filled:
             self.shape = rotated_shape
         
 
-    def rotate_counter_clockwise(self,board):
+    def rotate_counter_clockwise(self,shape,board):
         rotated_shape = []
-        for x, y in self.shape:
+        for x, y in shape:
             rotated_shape.append((y, -x))
         # print("shape before",self.shape)
         # print("shape after",rotated_shape)
-        filled = self.collided(board)
+        filled = self.collided(rotated_shape, board)
         
         if not filled:
             self.shape = rotated_shape
         
     
             
-    def collided(self, board):
+    def collided(self, shape, board):
         filled = False
-        for offset in self.shape:
+        for offset in shape:
             next_x = self.x + offset[0]
             next_y = self.y + offset[1]
 
@@ -70,7 +70,7 @@ class Tetromino:
         for offset in self.shape:
             next_y = self.y + offset[1]
             next_x = self.x + offset[0]
-            if next_x * TILE_SIZE >= WINDOW_WIDTH:
+            if next_x  >= BOARD_WIDTH:
                 self.x -= 1
     def set_shape(self):
         if self.type == "I":
@@ -105,16 +105,17 @@ class Tetromino:
         for offset in self.shape:
             next_y = self.y + 1 + offset[1]
             next_x = self.x + offset[0]
-            if next_y * TILE_SIZE >= WINDOW_HEIGHT:
+            if next_y >= BOARD_HEIGHT:
                 self.landed = True
                 break
             if tiles[next_x][next_y].filled:
                 self.landed = True
+                break
             
             
     def draw(self,screen):
         for i in range(len(self.shape)):
-            pygame.draw.rect(screen, self.color, ((self.x + self.shape[i][0]) * TILE_SIZE,(self.y + self.shape[i][1]) * TILE_SIZE, TILE_SIZE - 1, TILE_SIZE - 1))
+            pygame.draw.rect(screen, self.color, ((self.x + self.shape[i][0]) * TILE_SIZE + BOARD_OFFSET[0],(self.y + self.shape[i][1]) * TILE_SIZE + BOARD_OFFSET[1], TILE_SIZE - 1, TILE_SIZE - 1))
         
         
         

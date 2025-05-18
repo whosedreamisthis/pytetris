@@ -8,4 +8,4 @@ class Tile:
         self.filled = False
     
     def draw(self,screen):
-         pygame.draw.rect(screen, self.color, (self.x * TILE_SIZE,self.y * TILE_SIZE, TILE_SIZE - 1, TILE_SIZE - 1))
+         pygame.draw.rect(screen, self.color, ((self.x) * TILE_SIZE + BOARD_OFFSET[0],self.y * TILE_SIZE + BOARD_OFFSET[1], TILE_SIZE - 1, TILE_SIZE - 1))
