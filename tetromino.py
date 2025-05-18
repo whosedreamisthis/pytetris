@@ -4,11 +4,17 @@ from consts import *
 class Tetromino:
     def __init__(self, t_type):
         self.type = t_type
-        self.x = 5
-        self.y = 1
+        self.original_position = (5,1)
+        self.x = self.original_position[0]
+        self.y = self.original_position[1]
         self.landed = False
         self.set_shape()
         
+    def start(self):
+        self.x = self.original_position[0]
+        self.y = self.original_position[1]
+        self.landed = False
+
     def set_shape(self):
         if self.type == "I":
             self.shape = [(0,0),(0, 1), (0,2),(0,3)]
@@ -32,7 +38,7 @@ class Tetromino:
             self.shape = [(0,0),(1,0), (0,1),(1,1)]
             self.color = blue
 
-    def update(self,board):
+    def update(self):
         self.y += 1
         
         
@@ -42,7 +48,6 @@ class Tetromino:
             if next_y * TILE_SIZE >= WINDOW_HEIGHT:
                 self.landed = True
                 break
-            elif 
             
             
     def draw(self,screen):

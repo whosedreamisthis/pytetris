@@ -37,11 +37,12 @@ class Game:
             self.current_tetromino.draw(screen)
             if self.current_tetromino.landed:
                 self.current_tetromino = self.get_random_tetromino()
+                self.current_tetromino.start()
             
 
             pygame.display.update()
-            clock.tick(60)
-            time.sleep(1)
+            # clock.tick(60)
+            time.sleep(0.1)
             
     def init_tetrominos(self):
         self.tetrominos.append(Tetromino("I"))
