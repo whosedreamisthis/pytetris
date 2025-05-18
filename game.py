@@ -47,6 +47,11 @@ class Game:
                     elif event.key == pygame.K_DOWN:
                         self.fast = True
                         self.fall_speed = 0.1
+                    elif event.key == pygame.K_a:
+                        self.current_tetromino.rotate_counter_clockwise()
+                    elif event.key == pygame.K_d:
+                        self.current_tetromino.rotate_clockwise()
+
                 elif event.type == pygame.KEYUP:
                     if event.key == pygame.K_DOWN:
                         self.fast = False

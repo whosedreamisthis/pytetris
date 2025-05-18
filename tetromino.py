@@ -25,7 +25,19 @@ class Tetromino:
             if next_x < 0:
                 self.x += 1
 
-                 
+    def rotate_clockwise(self):
+        rotated_shape = []
+        for x, y in self.shape:
+            rotated_shape.append((-y, x))
+        self.shape = rotated_shape
+
+    def rotate_counter_clockwise(self):
+        rotated_shape = []
+        for x, y in self.shape:
+            rotated_shape.append((y, -x))
+        # print("shape before",self.shape)
+        # print("shape after",rotated_shape)
+        self.shape = rotated_shape
         
     def move_right(self):
         self.x += 1
