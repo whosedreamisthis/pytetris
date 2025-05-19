@@ -10,13 +10,29 @@ fast_sleep = 0.01
 fast = False
 screen = pygame.display.set_mode((WINDOW_WIDTH,WINDOW_HEIGHT))
 pygame.display.set_caption("Tetris")
+pygame.init()
 clock = pygame.time.Clock() 
+try:
+    font = pygame.font.Font("./assets/font/CourierPrime-Bold.ttf", 36)  # Try loading an Arial font
+except pygame.error:
+    font = pygame.font.Font(None, 38)  # Fallback to default font
 
+# Text to display
+text_to_show = "GAME OVER"
+
+# Render the text
+text_surface = font.render(text_to_show, True, green)
+
+# Get the rectangular area of the text surface
+text_rect = text_surface.get_rect()
+
+# Center the text on the screen
+text_rect.center = (WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2)
 
 class Game:
     tetrominos = []
     def __init__(self):
-        pygame.init()
+        
         self.quit = False
         self.board = Board()
         self.tetrominos  = []
@@ -26,15 +42,13 @@ class Game:
         self.fall_speed = 1  # Tetromino falls 1 block per second (we'll control this with time)
         self.last_fall_time = time.time()
         self.fall = False
-        self.paused = False
+        self.game_over = False
         
     def get_random_tetromino(self):
         return random.choice(self.tetrominos)
         
-    def start(self):
-        
-        while not self.quit:
-            for event in pygame.event.get():
+    def process_input(self):
+        for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.quit = True
                 if event.type == pygame.KEYDOWN:  # Check for a key press
@@ -57,7 +71,12 @@ class Game:
                     if event.key == pygame.K_DOWN:
                         self.fast = False
                         self.fall_speed = slow_sleep
+                        
+    def start(self):
+        
+        while not self.quit:
             
+            self.process_input()
             current_time = time.time()
             if current_time - self.last_fall_time >= self.fall_speed:
                 self.fall = True  # Move down by one block
@@ -68,7 +87,7 @@ class Game:
    
             
                 # Your code to move right, etc.
-            if not self.paused:
+            if not self.game_over:
                 screen.fill((80,80,80))
                 self.board.draw(screen)
                 self.current_tetromino.update(self.board, self.fall)            
@@ -85,13 +104,14 @@ class Game:
                 if self.current_tetromino.landed:
                     self.board.onTetrominoLanded(self.current_tetromino)
                     if self.check_game_over():  # New function to check game over
-                        self.paused = True
+                        self.game_over = True
                     else:
                         self.last_fall_time = time.time()
                         self.current_tetromino = self.get_random_tetromino()
                         self.current_tetromino.start()
-                
-
+            else:
+                pygame.draw.rect(screen,(128,128,128), text_rect)    
+                screen.blit(text_surface, text_rect)
             pygame.display.update()
             # clock.tick(1) 
             pygame.time.Clock().tick(60)

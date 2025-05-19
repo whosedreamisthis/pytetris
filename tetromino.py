@@ -4,8 +4,8 @@ from board import Board
 
 class Tetromino:
     def __init__(self, t_type):
-        self.type = "Z"#t_type
-        self.original_position = (5,1)
+        self.type = t_type
+        self.original_position = (5,-1)
         self.x = self.original_position[0]
         self.y = self.original_position[1]
         self.landed = False
@@ -56,10 +56,10 @@ class Tetromino:
             next_y = self.y + offset[1]
 
             # Boundary checks:
-            if next_x < 0 or next_x >= len(board.tiles) or next_y < 0 or next_y >= len(board.tiles[0]):
+            if next_x < 0 or next_x >= len(board.tiles) or next_y >= len(board.tiles[0]):
                 return True  # Collision with boundary
 
-            if board.tiles[next_x][next_y].filled:
+            if next_y >= 0 and board.tiles[next_x][next_y].filled:
                 filled = True
                 break
         return filled
